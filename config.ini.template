@@ -5,13 +5,13 @@ Real_File = config.ini
 ; openai 代理方案 ，如果不需要可以不修改 https://github.com/chatanywhere/GPT_API_free
 OPENAI_BASE_URL = https://api.openai.com/v1
 ; 你的openai 接口秘钥 | your openai api key
-OPENAI_API_KEY = youkey
+OPENAI_API_KEY = yourkey
 ; 你的 unsplash 使用开关 | Switch for using Unsplash
 UNSPLASH_ENABLE = false
 ; 你的 unsplash 接口秘钥 | your unsplash api key
 ; 使用','进行分割 | Use ',' for separation
 UNSPLASH_API_KEY = key1,key2,key3,key4
 ; 使用redis 来缓存上下文 | uses redis to cache the context
-REDIS_ENABLE = true
+REDIS_ENABLE = false
 ; redis URL | redis URL
-REDIS_URL = redis://127.0.0.1:6379/0
+REDIS_URL = redis://:123456@127.0.0.1:6379/0

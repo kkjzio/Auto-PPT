@@ -1,7 +1,7 @@
 from langchain import PromptTemplate, OpenAI, LLMChain
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.memory import RedisChatMessageHistory, ConversationBufferMemory
-
+from readconfig.myconfig import MyConfig
 
 class GptChain:
     template: str = """You are a chatbot having a conversation with a human.
@@ -37,8 +37,8 @@ class GptChain:
         prompt = PromptTemplate(
             input_variables=["chat_history", "human_input"], template=self.template)
         llm_chain = LLMChain(
-            llm=OpenAI(model_name="gpt-3.5-turbo", openai_api_key=self.openai_api_key, streaming=True,
-                       callbacks=[StreamingStdOutCallbackHandler()]),
+            llm=OpenAI(model_name="gpt-4o-mini", openai_api_key=self.openai_api_key, streaming=True,
+                       callbacks=[StreamingStdOutCallbackHandler()], base_url=self.openai_base_url),
             prompt=prompt,
             verbose=True,
             memory=memory,
@@ -53,6 +53,10 @@ class GptChain:
 
 
 if __name__ == "__main__":
-    chain = GptChain("you key", "1234", "you redis url")
-    song = chain.predict(question="Write me a song about sparkling water.")
+    config = MyConfig()
+    chain = GptChain(config.OPENAI_API_KEY,
+                      "1234",
+                      config.REDIS_URL,
+                      config.OPENAI_BASE_URL)
+    song = chain.predict(question="你是什么模型？.")
     # print(song)
