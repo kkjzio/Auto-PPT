@@ -3,6 +3,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.venv/
 
 # C extensions
 *.so
@@ -68,5 +69,4 @@ venv/
 
 picture/
 
-### 绝对删除注释 ,防止暴露秘钥
-config1.ini
+config.ini
