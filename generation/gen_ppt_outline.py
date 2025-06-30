@@ -13,8 +13,10 @@ class Gen:
     def __init__(self, session_id):
         self.config = MyConfig()
         print(f"open ai key:{self.config.OPENAI_API_KEY}")
+        print(f"model name:{self.config.OPENAI_MODEL_NAME}")
         self.GptChain = GptChain(openai_api_key=self.config.OPENAI_API_KEY, session_id=session_id,
-                                 redis_url=self.config.REDIS_URL,openai_base_url = self.config.OPENAI_BASE_URL)
+                                 redis_url=self.config.REDIS_URL, openai_base_url=self.config.OPENAI_BASE_URL,
+                                 redis_password=self.config.REDIS_PASSWORD, model_name=self.config.OPENAI_MODEL_NAME)
 
 
 # ----------------------------------------------------------------

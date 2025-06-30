@@ -26,12 +26,13 @@ docs = retriever.get_relevant_documents("What did the president say about Ketanj
 pretty_print_docs(docs)
 
 #  压缩上下文
-from langchain.llms import OpenAI
+from langchain_openai import OpenAI
 from langchain.retrievers import ContextualCompressionRetriever
-from langchain.retrievers.document_compressors import LLMChainExtractor, EmbeddingsFilter
+from langchain.retrievers.document_compressors import LLMChainFilter, EmbeddingsFilter
 
-llm = OpenAI(temperature=0,openai_api_key=config.OPENAI_API_KEY)
-compressor = LLMChainExtractor.from_llm(llm)
+llm = OpenAI(temperature=0, openai_api_key=config.OPENAI_API_KEY)
+# 使用 LLMChainFilter 替代已弃用的 LLMChainExtractor
+compressor = LLMChainFilter.from_llm(llm)
 compression_retriever = ContextualCompressionRetriever(base_compressor=compressor, base_retriever=retriever)
 
 compressed_docs = compression_retriever.get_relevant_documents("What did the president say about Ketanji Jackson Brown")

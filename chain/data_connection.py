@@ -1,9 +1,9 @@
 # Build a sample vectorDB
-from langchain.document_loaders import WebBaseLoader
-# from langchain.document_loaders import WebBaseLoader
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
+from langchain_community.document_loaders import WebBaseLoader
+# from langchain_community.document_loaders import WebBaseLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
 
 from readconfig.myconfig import MyConfig
 
@@ -21,7 +21,7 @@ splits = text_splitter.split_documents(data)
 embedding = OpenAIEmbeddings(openai_api_key=config.OPENAI_API_KEY)
 vectordb = Chroma.from_documents(documents=splits, embedding=embedding)
 
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.retrievers.multi_query import MultiQueryRetriever
 question="What are the scrapy?"
 llm = ChatOpenAI(temperature=0,openai_api_key=config.OPENAI_API_KEY)
@@ -37,10 +37,10 @@ print(unique_docs)
 len(unique_docs)
 
 from typing import List
-from langchain import LLMChain
 from pydantic import BaseModel, Field
-from langchain.prompts import PromptTemplate
-from langchain.output_parsers import PydanticOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import PydanticOutputParser
+from langchain_core.runnables import RunnablePassthrough
 
 
 # Output parser will split the LLM result into a list of queries
@@ -77,15 +77,16 @@ QUERY_PROMPT = PromptTemplate(
 #     原始问题：{问题}
 llm = ChatOpenAI(temperature=0,openai_api_key=config.OPENAI_API_KEY)
 
-# Chain
-llm_chain = LLMChain(llm=llm, prompt=QUERY_PROMPT, output_parser=output_parser)
+# 使用现代的 LCEL 替代 LLMChain
+llm_chain = QUERY_PROMPT | llm | output_parser
 
 # Other inputs
 # question = "What are the approaches to Task Decomposition?"
 
-# Run
+# Run - 使用 llm 参数替代 llm_chain
 retriever = MultiQueryRetriever(retriever=vectordb.as_retriever(),
-                                llm_chain=llm_chain,
+                                llm=llm,
+                                prompt=QUERY_PROMPT,
                                 parser_key="lines")  # "lines" is the key (attribute name) of the parsed output
 
 # Results
